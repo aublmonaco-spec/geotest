@@ -3,12 +3,12 @@ project:
   output-dir: docs
   
 website:
-  title: "Phenological Shifts in the Ruby-Throated Hummingbird and the Cardinal Flower"
+  title: "Pollination Pals: The Ruby-Throated Hummingbird and Cardinal Flower"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - projects.qmd
+      - about.qmd
   page-footer:
     right: "Built with [Quarto](https://quarto.org/)"
     left: "&copy; Copyright 2025, Aubrey Monaco"

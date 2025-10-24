@@ -5,6 +5,7 @@ subtitle: GEO511 Final Project
 date: today
 date-format: long
 ---
+
 # Introduction
 
 \[\~ 200 words\]
@@ -120,19 +121,13 @@ mean_ruby_throat <- mean_ruby_throat %>%
   mutate(rthmean2010 = ifelse(is.na(rthmean2010), 200.4848, rthmean2010)) %>%
   mutate(difference = year_day - rthmean2010)
 
+ggplot() + geom_sf(data = us) + geom_point(data = mean_card_fl, aes(x = longitude, y = latitude, fill = difference))
+
 cpal <- colorNumeric(palette = "mako", domain = mean_card_fl$difference, na.color = NA, reverse = TRUE)
 
 rpal <- colorNumeric(palette = "inferno", domain = mean_ruby_throat$difference, na.color = NA)
 
-leaflet(mean_card_fl) %>%
-  addProviderTiles(provider = "Esri") %>%
-  addPolylines(~longitude, ~ latitude, color = ~cpal(difference)) %>%
-  addLegend(pal = cpal, values = ~difference)
 
-leaflet(mean_ruby_throat) %>%
-  addProviderTiles(provider = "Esri") %>%
-  addCircleMarkers(~Longitude, ~Latitude, radius = 1, color = ~rpal(difference)) %>%
-  addLegend(pal = rpal, values = ~difference)
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):
@@ -160,6 +155,5 @@ Clear summary adequately describing the results and putting them in context. Dis
 # References
 
 All sources are cited in a consistent manner
-
 
 Thanks for checking out my web site!

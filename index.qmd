@@ -59,28 +59,134 @@ cardinal_flower <- cardinal_flower %>%
 
 cf2010 <- cardinal_flower %>%
   filter(year == 2010) %>%
-  mutate(year_day = yday(observed_on))
-
-cf2010 <- cf2010 %>%
   mutate(cfmean2010 = mean(year_day, na.rm = TRUE)) 
 
-mean_card_fl <- full_join(cardinal_flower, cf2010) 
+mean_card_fl <- full_join(cardinal_flower, cf2010)
 
 mean_card_fl <- mean_card_fl %>%
-  mutate(cfmean2010 = ifelse(is.na(cfmean2010), 233.375, cfmean2010)) %>%
-  mutate(difference = year_day - cfmean2010)
+  mutate(cfmean2010 = ifelse(is.na(cfmean2010), 178.3846, cfmean2010))
+
+cfmean2011 <- mean_card_fl %>%
+  filter(year == 2011) %>%
+  mutate(cfmean2011 = mean(year_day, na.rm = TRUE))
+
+cfmean2012 <- mean_card_fl %>%
+  filter(year == 2012) %>%
+  mutate(cfmean2012 = mean(year_day, na.rm = TRUE))
+
+cfmean2013 <- mean_card_fl %>%
+  filter(year == 2013) %>%
+  mutate(cfmean2013 = mean(year_day, na.rm = TRUE))
+
+cfmean2014 <- mean_card_fl %>%
+  filter(year == 2014) %>%
+  mutate(cfmean2014 = mean(year_day, na.rm = TRUE))
+
+cfmean2015 <- mean_card_fl %>%
+  filter(year == 2015) %>%
+  mutate(cfmean2015 = mean(year_day, na.rm = TRUE))
+
+cfmean2016 <- mean_card_fl %>%
+  filter(year == 2016) %>%
+  mutate(cfmean2016 = mean(year_day, na.rm = TRUE))
+
+cfmean2017 <- mean_card_fl %>%
+  filter(year == 2017) %>%
+  mutate(cfmean2017 = mean(year_day, na.rm = TRUE))
+
+cfmean2018 <- mean_card_fl %>%
+  filter(year == 2018) %>%
+  mutate(cfmean2018 = mean(year_day, na.rm = TRUE))
+
+cfmean2019 <- mean_card_fl %>%
+  filter(year == 2019) %>%
+  mutate(cfmean2019 = mean(year_day, na.rm = TRUE))
+
+cfmean2020 <- mean_card_fl %>%
+  filter(year == 2020) %>%
+  mutate(cfmean2020 = mean(year_day, na.rm = TRUE))
+
+cfmean2021 <- mean_card_fl %>%
+  filter(year == 2021) %>%
+  mutate(cfmean2021 = mean(year_day, na.rm = TRUE))
+
+cfmean2022 <- mean_card_fl %>%
+  filter(year == 2022) %>%
+  mutate(cfmean2022 = mean(year_day, na.rm = TRUE))
+
+cfmean2023 <- mean_card_fl %>%
+  filter(year == 2023) %>%
+  mutate(cfmean2023 = mean(year_day, na.rm = TRUE))
+
+cfmean2024 <- mean_card_fl %>%
+  filter(year == 2024) %>%
+  mutate(cfmean2024 = mean(year_day, na.rm = TRUE))
+
+cfmean2025 <- mean_card_fl %>%
+  filter(year == 2025) %>%
+  mutate(cfmean2025 = mean(year_day, na.rm = TRUE))
+
+mean_card_fl <- mean_card_fl %>%
+  mutate(cfmean = case_when(
+    year == 2011 ~ "193.1176",
+    year == 2012 ~ "186.4643",
+    year == 2013 ~ "166.1282",
+    year == 2014 ~ "162.5152",
+    year == 2015 ~ "198.9559",
+    year == 2016 ~ "171.7606",
+    year == 2017 ~ "168.3232",
+    year == 2018 ~ "165.468",
+    year == 2019 ~ "175.7049",
+    year == 2020 ~ "175.8336",
+    year == 2021 ~ "176.8913",
+    year == 2022 ~ "166.3364",
+    year == 2023 ~ "163.6606",
+    year == 2024 ~ "178.0036",
+    year == 2025 ~ "167.9547"
+  )) %>%
+  mutate(cfmean = as.numeric(cfmean)) %>%
+  mutate(difference = cfmean - cfmean2010)
 
 rth_1995_2021 <- read.csv("RTH_1995_2021.csv")
 rth_2022_2025 <- read.csv("RTH_2022_2025.csv")
 
 rth_all <- rth_1995_2021 %>% full_join(rth_2022_2025)
 
-ggplot() + geom_sf(data = us) + geom_point(data = mean_card_fl, aes(x = longitude, y = latitude, color = difference))
-ggplot() + geom_sf(data = us) + geom_point(data = rth_1995_2021, aes(x = Longitude, y = Latitude, color = Year)) + geom_point(data = rth_2022_2025, aes(x = Longitude, y = Latitude, color = Year)) 
+ruby_throat <- rth_all %>%
+  mutate(Date = parse_date_time(Date, orders = c("mdy", "ydm", "dmy"))) %>%
+  mutate(year = year(Date)) %>%
+  mutate(year_day = yday(Date))
 
-leaflet() %>%
+rth2010 <- ruby_throat %>%
+  filter(Year == 2010) %>%
+  mutate(year_day = yday(Date))
+
+rth2010 <- rth2010 %>%
+  mutate(rthmean2010 = mean(year_day, na.rm = TRUE)) 
+
+mean_ruby_throat <- full_join(ruby_throat, rth2010) 
+
+mean_ruby_throat <- mean_ruby_throat %>%
+  mutate(rthmean2010 = ifelse(is.na(rthmean2010), 200.4848, rthmean2010)) %>%
+  mutate(difference = year_day - rthmean2010)
+
+ggplot() + geom_sf(data = us) + geom_point(data = mean_card_fl, aes(x = longitude, y = latitude, color = difference))
+
+ggplot() + geom_sf(data = us) + geom_point(data = mean_ruby_throat, aes(x = Longitude, y = Latitude, color = difference)) 
+
+cpal <- colorNumeric(palette = "mako", domain = mean_card_fl$difference, na.color = NA, reverse = TRUE)
+
+rpal <- colorNumeric(palette = "inferno", domain = mean_ruby_throat$difference, na.color = NA)
+
+leaflet(mean_card_fl) %>%
   addProviderTiles(provider = "Esri") %>%
-  addCircleMarkers(lng = mean_card_fl$longitude, lat = mean_card_fl$latitude, radius = 1)
+  addPolylines(~longitude, ~ latitude, color = ~cpal(difference)) %>%
+  addLegend(pal = cpal, values = ~difference)
+
+leaflet(mean_ruby_throat) %>%
+  addProviderTiles(provider = "Esri") %>%
+  addCircleMarkers(~Longitude, ~Latitude, radius = 1, color = ~rpal(difference)) %>%
+  addLegend(pal = rpal, values = ~difference)
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):

@@ -131,7 +131,7 @@ rpal <- colorNumeric(palette = "inferno", domain = mean_ruby_throat$difference, 
  
 leaflet(mean_card_fl) %>%
   addProviderTiles(provider = "Esri") %>%
-  addCircleMarkers(~longitude, ~ latitude, radius = 1)
+  addCircleMarkers(~longitude, ~ latitude, radius = 1, color = ~cpal(difference))
 
 ```
 

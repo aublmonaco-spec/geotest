@@ -4,6 +4,8 @@ author: Aubrey Monaco
 subtitle: GEO511 Final Project
 date: today
 date-format: long
+editor_options:
+  chunk_output_type: console
 ---
 
 # Introduction
@@ -126,8 +128,7 @@ ggplot() + geom_sf(data = us) + geom_point(data = mean_card_fl, aes(x = longitud
 cpal <- colorNumeric(palette = "mako", domain = mean_card_fl$difference, na.color = NA, reverse = TRUE)
 
 rpal <- colorNumeric(palette = "inferno", domain = mean_ruby_throat$difference, na.color = NA)
-
-
+ 
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):

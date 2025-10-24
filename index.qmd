@@ -129,6 +129,10 @@ cpal <- colorNumeric(palette = "mako", domain = mean_card_fl$difference, na.colo
 
 rpal <- colorNumeric(palette = "inferno", domain = mean_ruby_throat$difference, na.color = NA)
  
+leaflet(mean_card_fl) %>%
+  addProviderTiles(provider = "Esri") %>%
+  addCircleMarkers(~longitude, ~ latitude, radius = 1)
+
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):

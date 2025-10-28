@@ -186,13 +186,31 @@ rubythroat_all <- rth_1 %>% full_join(rth_2)
 
 cpal <- colorNumeric(palette = "mako", domain = card_fl_all$mean, na.color = NA, reverse = TRUE)
 
+cearlypal <- colorNumeric(palette = "mako", domain = cf_early_all$mean, na.color = NA, reverse = TRUE)
+
 rpal <- colorNumeric(palette = "inferno", domain = rubythroat_all$mean, na.color = NA)
  
+rearlypal <- colorNumeric(palette = "inferno", domain = rth_early_all$mean, na.color = NA)
+
 leaflet(card_fl_all) %>%
   addProviderTiles(provider = "Esri") %>%
   addCircleMarkers(~longitude, ~ latitude, radius = 1, color = ~cpal(mean)) %>%
   addLegend(pal = cpal, values = ~mean)
 
+leaflet(cf_early_all) %>%
+  addProviderTiles(provider = "Esri") %>%
+  addCircleMarkers(~longitude, ~ latitude, radius = 1, color = ~cearlypal(mean)) %>%
+  addLegend(pal = cearlypal, values = ~mean) 
+
+leaflet(rubythroat_all) %>%
+  addProviderTiles(provider = "Esri") %>%
+  addCircleMarkers(~Longitude, ~ Latitude, radius = 1, color = ~rpal(mean)) %>%
+  addLegend(pal = rpal, values = ~mean) 
+
+leaflet(rth_early_all) %>%
+  addProviderTiles(provider = "Esri") %>%
+  addCircleMarkers(~Longitude, ~ Latitude, radius = 1, color = ~rearlypal(mean)) %>%
+  addLegend(pal = rearlypal, values = ~mean) 
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):

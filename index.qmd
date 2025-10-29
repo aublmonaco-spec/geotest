@@ -45,7 +45,9 @@ library(dplyr)
 library(sf)
 library(spData)
 library(lubridate)
+```
 
+```{r, warning=FALSE, message=FALSE}
 cardinal_flower1 <- read.csv("cardinal_flower_nat.csv")
 cardinal_flower2 <- read.csv("cardinal_flower.csv")
 cardinal_flower2 <- cardinal_flower2 %>%
@@ -58,7 +60,7 @@ world <- world
 us <- world[world$name_long == "United States", ]
 ```
 
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 cardinal_flower <- cardinal_flower %>%
   mutate(observed_on = parse_date_time(observed_on, orders = c("mdy", "ydm", "dmy"))) %>%
   mutate(year = year(observed_on)) %>%
@@ -73,42 +75,10 @@ cardinal_flower <- cardinal_flower %>% full_join(cfmean1014)
 cardinal_flower <- cardinal_flower %>%
   mutate(mean1014 = ifelse(is.na(mean1014), 69.30986, mean1014))
 
-cf_early <- cardinal_flower %>%
-  filter(year %in% c(2010, 2011, 2012, 2013, 2014) & month %in% c(1, 2, 3, 4, 5))
-
-cf_early_29 <- cf_early %>%
-  filter(latitude >= 29.12749 & latitude < 33) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-cf_early_33 <- cf_early %>%
-  filter(latitude > 33 & latitude < 36) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-cf_early_36 <- cf_early %>%
-  filter(latitude > 36 & latitude < 39) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-cf_early_39 <- cf_early %>%
-  filter(latitude > 39 & latitude < 42) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-cf_early_42 <- cf_early %>%
-  filter(latitude > 42 & latitude <= 45.02266) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-cf_early_1 <- cf_early_29 %>% full_join(cf_early_33)
-cf_early_2 <- cf_early_36 %>% full_join(cf_early_39)
-cf_early_3 <- cf_early_42 %>% full_join(cf_early_2)
-
-cf_1 <- cf_early_1 %>% full_join(cf_early_2)
-cf_2 <- cf_early_3 %>% full_join(cf_1)
-
-cf_early_all <- cf_1 %>%
-  full_join(cf_2)
-
 ```
 
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+
+```{r, message=FALSE, warning=FALSE}
 cardinal_flower_new <- cardinal_flower %>%
   filter(year %in% c(2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025) & month %in% c(1, 2, 3, 4, 5))
 
@@ -145,9 +115,11 @@ card_4 <- card_1 %>% full_join(card_2)
 
 card_fl_all <- card_3 %>%
   full_join(card_4)
+
 ```
 
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+
+```{r, message=FALSE, warning=FALSE}
 
 rth_1995_2021 <- read.csv("RTH_1995_2021.csv")
 rth_2022_2025 <- read.csv("RTH_2022_2025.csv")
@@ -170,52 +142,9 @@ ruby_throat <- ruby_throat %>% full_join(rthmean1014)
 ruby_throat <- ruby_throat %>%
   mutate(mean1014 = ifelse(is.na(mean1014), 121.0787, mean1014))
 
-rth_early_24 <- rth_early %>%
-  filter(Latitude >= 24.54630 & Latitude < 27) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_27 <- rth_early %>%
-  filter(Latitude > 27 & Latitude < 30) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_30 <- rth_early %>%
-  filter(Latitude > 30 & Latitude < 33) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_33 <- rth_early %>%
-  filter(Latitude > 33 & Latitude < 36) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_36 <- rth_early %>%
-  filter(Latitude > 36 & Latitude < 39) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_39 <- rth_early %>%
-  filter(Latitude > 34 & Latitude < 36) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_42 <- rth_early %>%
-  filter(Latitude > 36 & Latitude < 38) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-rth_early_45 <- rth_early %>%
-  filter(Latitude > 38 & Latitude < 40) %>%
-  mutate(mean = mean(year_day, na.rm = TRUE))
-
-
-rth_early_1 <- rth_early_24 %>% full_join(rth_early_27)
-rth_early_2 <- rth_early_30 %>% full_join(rth_early_33)
-rth_early_3 <- rth_early_36 %>% full_join(rth_early_39)
-rth_early_4 <- rth_early_42 %>% full_join(rth_early_45)
-
-rearly1 <- rth_early_1 %>% full_join(rth_early_2)
-rearly2 <- rth_early_3 %>% full_join(rth_early_4)
-
-rth_early_all <- rearly1 %>% full_join(rearly2)
-
 ```
 
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 
 rth_all <- ruby_throat %>%
   filter(Year %in% c(2015, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2025) & Month %in% c(1, 2, 3, 4, 5, 6))
@@ -271,7 +200,7 @@ rth2 <- rth_3 %>% full_join(rth_4)
 rubythroat_all <- rth1 %>% full_join(rth2)
 ```
 
-```{r}
+```{r, echo=FALSE}
 
 cpal <- colorNumeric(palette = "rocket", domain = card_fl_all$difference, na.color = NA)
 
@@ -285,7 +214,7 @@ rpal <- colorNumeric(palette = "mako", domain = rubythroat_all$difference, na.co
 leaflet(card_fl_all) %>%
   addProviderTiles(provider = "Esri") %>%
   addCircleMarkers(~longitude, ~ latitude, radius = 1, color = ~cpal(difference)) %>%
-  addLegend(pal = cpal, values = ~difference)
+  addLegend(pal = cpal, values = ~difference, title = "Difference From 2010-2014 Average (days)", position = "bottomleft")
 ```
 
 
@@ -294,7 +223,7 @@ leaflet(card_fl_all) %>%
 leaflet(rubythroat_all) %>%
   addProviderTiles(provider = "Esri") %>%
   addCircleMarkers(~Longitude, ~ Latitude, radius = 1, color = ~rpal(difference)) %>%
-  addLegend(pal = rpal, values = ~difference) 
+  addLegend(pal = rpal, values = ~difference, title = "Difference From 2010-2014 Average (days)", position = "bottomleft") 
 ```
 
 Load any required packages in a code chunk (you may need to install some packages):

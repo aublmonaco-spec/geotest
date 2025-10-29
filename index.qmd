@@ -10,13 +10,10 @@ editor_options:
 
 # Introduction
 
-\[\~ 200 words\]
+With warming temperatures due to anthropogenic climate change, bird migration times are shifting, and they are tending to migrate back to their breeding grounds earlier each year. Conversely, flowers that certain migrating birds, like ruby-throated hummingbirds, may feed on may not be changing the time of their first bloom. Therefore, when birds that rely on flowers as food sources migrate back earlier, they may not have enough food to support them when they arrive. I want to investigate how a pollinating bird species, the Ruby-throated Hummingbird (Archilochus colubris), has been shifting its migration patterns and how the appearances of a species it prefers to feed on, the cardinal flower (Lobelia cardinalis), has changed (or not changed) over the past 15 years. I predict that ruby-throated hummingbirds are migrating back earlier each year, and they are arriving at increasing latitudes earlier than lower latitudes. Additionally, I suppose that the first sightings of cardinal flowers in the months that ruby-throated hummingbirds migrate north will be earlier, but not to the same extent as the bird migrations.
 
-Clearly stated background and questions / hypotheses / problems being addressed. Sets up the analysis in an interesting and compelling way. Include figures if you like. trying
 
 # Materials and methods
-
-\[\~ 200 words\]
 
 Narrative: Clear narrative description of the data sources and methods. Includes data from at least two sources that were integrated / merged in R.
 
@@ -24,20 +21,9 @@ Code: The code associated with the project is well organized and easy to follow.
 
 Data: The underlying data are publicly accessible via the web and downloaded/accessed within the Rmd script. If you want to use your own data, you must make it available on a website (e.g. Figshare) so that others are able to re-run your code.
 
-You can do bullets like this:
+1.  I loaded my necessary libraries
 
--   The first most important thing
--   The second most important thing
--   The third most important thing
-
-You can do numbers like this:
-
-1.  The first most important thing
-2.  The second most important thing
-3.  The third most important thing
-
-
-```{r, message=FALSE, echo=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE}
 #install.packages("leaflet")
 library(leaflet)
 library(ggplot2)
@@ -47,6 +33,7 @@ library(spData)
 library(lubridate)
 ```
 
+2. I loaded my data from iNaturalist and the US Phenology Network, renamed desired columns for easier use, and joined my data into one set.
 ```{r, warning=FALSE, message=FALSE}
 cardinal_flower1 <- read.csv("cardinal_flower_nat.csv")
 cardinal_flower2 <- read.csv("cardinal_flower.csv")
@@ -54,19 +41,19 @@ cardinal_flower2 <- cardinal_flower2 %>%
   rename(latitude = Latitude, longitude = Longitude)
 
 cardinal_flower <- cardinal_flower1 %>% full_join(cardinal_flower2)
-
-world <- world
-
-us <- world[world$name_long == "United States", ]
 ```
 
+3. I used the Lubridate package to standardize the format all of the dates in my cardinal flower data. Then, I used this standardized data to create a year column, where I pulled the years from the dates, and a year_day column, to transform the date into a day out of 365, and a month column to pull the month from the dates.
 ```{r, message=FALSE, warning=FALSE}
 cardinal_flower <- cardinal_flower %>%
   mutate(observed_on = parse_date_time(observed_on, orders = c("mdy", "ydm", "dmy"))) %>%
   mutate(year = year(observed_on)) %>%
   mutate(year_day = yday(observed_on)) %>%
   mutate(month = month(observed_on))
+```
 
+4. I found the mean date of first sightings of cardinal flowers from 2010 to 2014 and from January to May (when ruby-throats migrate north) to compare data from the last 10 years to. The mean date of cardinal flower sighting was March 10th (the 69th day of the year).
+```{r, message=FALSE, warning=FALSE}
 cfmean1014 <- cardinal_flower %>%
   filter(year %in% c(2010, 2011, 2012, 2013, 2014) & month %in% c(1, 2, 3, 4, 5)) %>%
   mutate(mean1014 = mean(year_day, na.rm = TRUE))
@@ -78,6 +65,7 @@ cardinal_flower <- cardinal_flower %>%
 ```
 
 
+5. I created the dataset to see trends between 2015 and 2025, and in months Janurary to May. I separated sightings into 5 bands of latitude (in increments of approxiamtely 3, excepting 27 to 33, since there were so few observations). I rejoined all of these bands into one dataset to plot on a map. I also created a difference column, showing the difference in days of arrival between the new dataset and the 2010 to 2014 average using mean - mean1014.
 ```{r, message=FALSE, warning=FALSE}
 cardinal_flower_new <- cardinal_flower %>%
   filter(year %in% c(2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025) & month %in% c(1, 2, 3, 4, 5))
@@ -118,7 +106,7 @@ card_fl_all <- card_3 %>%
 
 ```
 
-
+6. I followed the same steps to find data for ruby-throated hummingbird migration and found their average arrival date between 2010 and 2014 (May 1st, the 121st day of the year).
 ```{r, message=FALSE, warning=FALSE}
 
 rth_1995_2021 <- read.csv("RTH_1995_2021.csv")
@@ -144,6 +132,7 @@ ruby_throat <- ruby_throat %>%
 
 ```
 
+7. I then similarly created the runy-throat dataset for 2015-2025, but I added 3 more bands of latitude to account for the larger number of observations recorded at higher and lower latitudes. I again combined these bands into one dataset, and created a difference column, showing the difference in days of arrival between the new dataset and the 2010 to 2014 average using mean - mean1014.
 ```{r, message=FALSE, warning=FALSE}
 
 rth_all <- ruby_throat %>%
@@ -200,7 +189,8 @@ rth2 <- rth_3 %>% full_join(rth_4)
 rubythroat_all <- rth1 %>% full_join(rth2)
 ```
 
-```{r, echo=FALSE}
+8. I then created color palettes using viridis scales and colorNumeric from the Leaflet package for my two maps, specifying to use the difference column in each dataset to map the colors to.
+```{r}
 
 cpal <- colorNumeric(palette = "rocket", domain = card_fl_all$difference, na.color = NA)
 

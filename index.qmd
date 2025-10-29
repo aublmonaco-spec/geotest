@@ -192,7 +192,7 @@ rubythroat_all <- rth1 %>% full_join(rth2)
 8. I then created color palettes using viridis scales and colorNumeric from the Leaflet package for my two maps, specifying to use the difference column in each dataset to map the colors to.
 ```{r}
 
-cpal <- colorNumeric(palette = "rocket", domain = card_fl_all$difference, na.color = NA)
+cpal <- colorNumeric(palette = "rocket", domain = card_fl_all$difference, na.color = NA, reverse = TRUE)
 
 rpal <- colorNumeric(palette = "mako", domain = rubythroat_all$difference, na.color = NA)
  
@@ -203,6 +203,7 @@ rpal <- colorNumeric(palette = "mako", domain = rubythroat_all$difference, na.co
 ```{r}
 leaflet(card_fl_all) %>%
   addProviderTiles(provider = "Esri") %>%
+  addSimpleGraticule(interval = 3) %>%
   addCircleMarkers(~longitude, ~ latitude, radius = 1, color = ~cpal(difference)) %>%
   addLegend(pal = cpal, values = ~difference, title = "Difference From 2010-2014 Average (days)", position = "bottomleft")
 ```
@@ -212,6 +213,7 @@ leaflet(card_fl_all) %>%
 ```{r}
 leaflet(rubythroat_all) %>%
   addProviderTiles(provider = "Esri") %>%
+  addSimpleGraticule(interval = 3) %>%
   addCircleMarkers(~Longitude, ~ Latitude, radius = 1, color = ~rpal(difference)) %>%
   addLegend(pal = rpal, values = ~difference, title = "Difference From 2010-2014 Average (days)", position = "bottomleft") 
 ```
